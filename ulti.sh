@@ -198,6 +198,36 @@ open(p,'w').write(s)
   sed -i "/$name \\\\/d" "$VMK"
 done
 
+# 3.10 Modul-modul lain yang bentrok install path sama AOSP source-built
+#      (protobuf versioned libs, drm clearkey trio, power HAL vintf
+#      fragment, toybox_vendor) - hapus semua prebuilt vendor-nya
+python3 -c "
+import re
+p='$VBP'
+s=open(p).read()
+for pat in [
+    r'cc_prebuilt_library_shared \{\s*name: \"a02_libprotobuf-cpp-full-3.9.1\",.*?\n\}\n',
+    r'cc_prebuilt_library_shared \{\s*name: \"libprotobuf-cpp-lite-3.9.1\",.*?\n\}\n',
+    r'cc_prebuilt_binary \{\s*name: \"android.hardware.drm@1.3-service\",.*?\n\}\n',
+    r'prebuilt_etc \{\s*name: \"android.hardware.drm@1.3-service.clearkey_vendor\",.*?\n\}\n',
+    r'prebuilt_etc \{\s*name: \"manifest_android.hardware.drm@1.3-service.clearkey\",.*?\n\}\n',
+    r'prebuilt_etc \{\s*name: \"power-default\",.*?\n\}\n',
+    r'cc_prebuilt_binary \{\s*name: \"toybox_vendor_vendor\",.*?\n\}\n',
+]:
+    s=re.sub(pat, '', s, flags=re.S)
+open(p,'w').write(s)
+"
+sed -i \
+  -e '/a02_libprotobuf-cpp-full-3.9.1 \\/d' \
+  -e '/libprotobuf-cpp-lite-3.9.1 \\/d' \
+  -e '/android.hardware.drm@1.3-service.clearkey_vendor \\/d' \
+  -e '/manifest_android.hardware.drm@1.3-service.clearkey \\/d' \
+  -e '/^    android.hardware.drm@1.3-service \\/d' \
+  -e '/    power-default \\/d' \
+  -e '/toybox_vendor \\/d' \
+  -e '/toybox_vendor_vendor \\/d' \
+  "$VMK"
+
 # ============================================================
 # BAGIAN 4: DEDUP SEMUA MODUL SOONG/MAKE YANG BENTROK NAMA SEKALIGUS
 # (error tipe "module X already defined" - beda dari overriding-commands

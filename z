@@ -1,0 +1,4 @@
+cd /tmp/android_build
+source build/envsetup.sh
+lunch lineage_a02-userdebug
+mka vendorimage
