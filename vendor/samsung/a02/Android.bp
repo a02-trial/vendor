@@ -4155,10 +4155,11 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "android.hardware.audio.service",
+    name: "android.hardware.audio.service_vendor",
     owner: "samsung",
     src: "proprietary/etc/init/android.hardware.audio.service.rc",
     sub_dir: "etc/init",
+    filename: "android.hardware.audio.service.rc",
     vendor: true,
 }
 
@@ -4170,13 +4171,13 @@ prebuilt_etc {
     vendor: true,
 }
 
-prebuilt_etc {
-    name: "android.hardware.cas@1.2-service",
-    owner: "samsung",
-    src: "proprietary/etc/init/android.hardware.cas@1.2-service.rc",
-    sub_dir: "etc/init",
-    vendor: true,
-}
+// prebuilt_etc {
+//     name: "android.hardware.cas@1.2-service",
+//     owner: "samsung",
+//     src: "proprietary/etc/init/android.hardware.cas@1.2-service.rc",
+//     sub_dir: "etc/init",
+//     vendor: true,
+// }
 
 prebuilt_etc {
     name: "android.hardware.configstore@1.1-service",
@@ -4186,13 +4187,13 @@ prebuilt_etc {
     vendor: true,
 }
 
-prebuilt_etc {
-    name: "android.hardware.drm@1.3-service.clearkey",
-    owner: "samsung",
-    src: "proprietary/etc/init/android.hardware.drm@1.3-service.clearkey.rc",
-    sub_dir: "etc/init",
-    vendor: true,
-}
+// prebuilt_etc {
+//     name: "android.hardware.drm@1.3-service.clearkey",
+//     owner: "samsung",
+//     src: "proprietary/etc/init/android.hardware.drm@1.3-service.clearkey.rc",
+//     sub_dir: "etc/init",
+//     vendor: true,
+// }
 
 prebuilt_etc {
     name: "android.hardware.drm@1.3-service.widevine",
@@ -4211,10 +4212,11 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "android.hardware.gatekeeper@1.0-service",
+    name: "android.hardware.gatekeeper@1.0-service_vendor",
     owner: "samsung",
     src: "proprietary/etc/init/android.hardware.gatekeeper@1.0-service.rc",
     sub_dir: "etc/init",
+    filename: "android.hardware.gatekeeper@1.0-service.rc",
     vendor: true,
 }
 
@@ -4227,10 +4229,11 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "android.hardware.graphics.composer@2.1-service",
+    name: "android.hardware.graphics.composer@2.1-service_vendor",
     owner: "samsung",
     src: "proprietary/etc/init/android.hardware.graphics.composer@2.1-service.rc",
     sub_dir: "etc/init",
+    filename: "android.hardware.graphics.composer@2.1-service.rc",
     vendor: true,
 }
 

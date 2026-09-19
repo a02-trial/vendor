@@ -76,6 +76,30 @@ VMK="vendor/samsung/a02/a02-vendor.mk"
 DMK="device/samsung/a02/device.mk"
 
 # ============================================================
+# BAGIAN 2.5: FIX BUILD HOST DAN DEPENDENCY YANG TIDAK TERSEDIA
+# ============================================================
+python3 - <<'PYEOF'
+from pathlib import Path
+
+metalava = Path('tools/metalava/Android.bp')
+text = metalava.read_text()
+if 'name: "metalava",\n    enabled: false,' not in text:
+  text = text.replace('name: "metalava",\n', 'name: "metalava",\n    enabled: false,\n', 1)
+metalava.write_text(text)
+
+protolog = Path('frameworks/base/tools/protologtool/Android.bp')
+text = protolog.read_text()
+text = text.replace('        "jsonlib",\n', '')
+protolog.write_text(text)
+
+board = Path('device/samsung/a02/BoardConfig.mk')
+text = board.read_text()
+if 'TARGET_USES_64_BIT_BINDER :=' not in text:
+  text += '\nTARGET_USES_64_BIT_BINDER := true\n'
+board.write_text(text)
+PYEOF
+
+# ============================================================
 # BAGIAN 3: FIX KONFLIK INSTALL PATH ("overriding commands for target")
 # ============================================================
 
@@ -228,6 +252,42 @@ sed -i \
   -e '/toybox_vendor_vendor \\/d' \
   "$VMK"
 
+  # 3.11 rc vendor CAS dan clearkey identik dengan AOSP; comment block vendor
+  #      agar modul source-built AOSP tetap menjadi pemilik nama dan install path.
+  python3 - <<'PYEOF'
+  from pathlib import Path
+
+  path = Path('vendor/samsung/a02/Android.bp')
+  lines = path.read_text().splitlines(keepends=True)
+  targets = {
+    'android.hardware.cas@1.2-service',
+    'android.hardware.drm@1.3-service.clearkey',
+  }
+  out = []
+  i = 0
+  while i < len(lines):
+    if lines[i].strip() in ('prebuilt_etc {', 'cc_prebuilt_binary {', 'cc_prebuilt_library_shared {'):
+      start = i
+      depth = 0
+      name = None
+      while i < len(lines):
+        depth += lines[i].count('{') - lines[i].count('}')
+        if lines[i].lstrip().startswith('name: "'):
+          name = lines[i].split('name: "', 1)[1].split('"', 1)[0]
+        i += 1
+        if depth == 0:
+          break
+      block = lines[start:i]
+      if name in targets and not block[0].lstrip().startswith('//'):
+        out.extend('// ' + line if line.strip() else line for line in block)
+      else:
+        out.extend(block)
+    else:
+      out.append(lines[i])
+      i += 1
+  path.write_text(''.join(out))
+  PYEOF
+
 # ============================================================
 # BAGIAN 4: DEDUP SEMUA MODUL SOONG/MAKE YANG BENTROK NAMA SEKALIGUS
 # (error tipe "module X already defined" - beda dari overriding-commands
@@ -329,21 +389,8 @@ sudo apt-get install -y libncurses5 libtinfo5 2>/dev/null || {
 }
 
 # ============================================================
-# BAGIAN 6: FIX modul "jsonlib" ilang (project cts di-remove tapi
-# dibutuhin protologtool) - ambil cts/libs/json doang via sparse checkout
+# BAGIAN 6: protologtool tidak lagi bergantung pada jsonlib
 # ============================================================
-if [ ! -f cts/libs/json/Android.bp ]; then
-  git clone --filter=blob:none --no-checkout --depth 1 -b lineage-18.1 \
-    https://github.com/LineageOS/android_cts /tmp/cts_sparse
-  cd /tmp/cts_sparse
-  git sparse-checkout init --cone
-  git sparse-checkout set libs/json
-  git checkout
-  cd /tmp/android_build
-  mkdir -p cts/libs
-  cp -r /tmp/cts_sparse/libs/json cts/libs/json
-  rm -rf /tmp/cts_sparse
-fi
 
 # ============================================================
 # BAGIAN 7: PAKE zImage PREBUILT (skip kompilasi kernel dari source)
