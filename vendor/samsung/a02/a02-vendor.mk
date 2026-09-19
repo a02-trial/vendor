@@ -868,7 +868,7 @@ PRODUCT_PACKAGES += \
     android.hardware.memtrack@1.0-impl \
     android.hardware.renderscript@1.0-impl \
     android.hardware.sensors@1.0-impl \
-    android.hardware.soundtrigger@2.0-impl \
+    android.hardware.soundtrigger@2.0-impl_vendor \
     android.hardware.thermal@1.0-impl \
     android.hardware.thermal@2.0-impl \
     audio.bluetooth.default \
@@ -1244,10 +1244,10 @@ PRODUCT_PACKAGES += \
     libsrv_um \
     libstagefright_amrnb_common \
     libstagefright_bufferpool@2.0.1 \
-    libstagefright_bufferqueue_helper_vendor \
+    libstagefright_bufferqueue_helper_DISABLED_vendor \
     libstagefright_enc_common \
     libstagefright_flacdec \
-    libstagefright_omx_vendor \
+    libstagefright_omx_DISABLED_DISABLED_vendor \
     libstagefright_soft_aacdec \
     libstagefright_soft_aacenc \
     libstagefright_soft_ac4dec \
@@ -1299,7 +1299,7 @@ PRODUCT_PACKAGES += \
     libvpx \
     libvt_custom \
     libwebrtc_audio_preprocessing \
-    libwifi-hal \
+    libwifi-hal_vendor \
     libwpa_client \
     libwvhidl \
     libclearkeycasplugin \
@@ -1327,7 +1327,7 @@ PRODUCT_PACKAGES += \
     libreverbwrapper \
     libsamsungSoundbooster_plus \
     libswdap \
-    libvisualizer \
+    libvisualizer_vendor \
     vendor.mediatek.hardware.audio@6.1 \
     vendor.mediatek.hardware.bluetooth.audio@2.1 \
     vendor.mediatek.hardware.camera.isphal@1.0 \
