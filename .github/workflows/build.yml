@@ -43,7 +43,7 @@ jobs:
       - name: Make Script Executable & Run ulti.sh
         run: |
           chmod +x vendor-a02_vendor/ulti.sh
-          cd vendor-a02_vendor
+          cd ${GITHUB_WORKSPACE}
           ./ulti.sh
 
       - name: Print ccache Statistics
