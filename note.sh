@@ -60,7 +60,9 @@ ATURAN KERJA PER ERROR (satu command per chat, penjelasan 1-2 kalimat):
 cek isi file yang error -> command fix -> command verifikasi ->
 command build + append fixlog.sh.
 
-STATUS SEKARANG: masih whack-a-mole di tahap ckati writing build rules.
-Fix terakhir yang udah masuk fixlog.sh: cas@1.2-service (vintf) dan
-awk_vendor_vendor. Error berikutnya belum diketahui.
+STATUS SEKARANG: masih whack-a-mole di tahap ckati writing build rules
+(belum lolos ke ninja compile). Fix yang udah masuk fixlog.sh: cas@1.2-service,
+awk, boringssl_self_test32, camera.device@1.0/3.2/3.3/3.4/3.5-impl_vendor,
+dumpsys, libalsautils. Error terakhir yang ditangani: libalsautils. Next:
+jalanin bash ulti.sh, lalu lanjut fix error berikutnya kalau ada.
 EOF
