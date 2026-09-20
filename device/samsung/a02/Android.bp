@@ -1,3 +1,0 @@
-// Placeholder Android.bp buat device tree a02.
-// Tambahin soong module (misal init_rc, prebuilt_etc) di sini kalau perlu,
-// biar gak semua lewat Android.mk lama.
