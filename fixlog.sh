@@ -131,5 +131,20 @@ open(vmk,'w').write(t)
 print("camera.device@3.2-impl_vendor dihapus:",n)
 PY
 
+# --- hapus camera.device@3.3/3.4/3.5-impl_vendor (bentrok install path vendor/lib/camera.device@3.x-impl.so sama AOSP source) ---
+python3 - "$VBP" "$VMK" << 'PY'
+import re,sys
+vbp,vmk=sys.argv[1:3]
+s=open(vbp).read()
+t=open(vmk).read()
+for v in ['3.3','3.4','3.5']:
+    nm='camera.device@%s-impl_vendor'%v
+    s,n=re.subn(r'(?ms)^\w+ \{\n\s*name: "'+re.escape(nm)+r'",.*?^\}\n','',s)
+    t=re.sub(r'(?m)^\s*'+re.escape(nm)+r'\s*\\?\n','',t)
+    print(nm,"dihapus:",n)
+open(vbp,'w').write(s)
+open(vmk,'w').write(t)
+PY
+
 rm -rf out/target/product/a02/vendor/etc/vintf/manifest out/target/product/a02/vendor/etc/etc
 echo "fixlog.sh selesai. Lanjut: ./z"
