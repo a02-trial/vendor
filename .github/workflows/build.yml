@@ -1,0 +1,52 @@
+name: Manual Build Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      clear_ccache:
+        description: 'Kosongkan ccache sebelum build (true/false)'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache build-essential bc bison flex libssl-dev libncurses-dev zip
+
+      - name: Setup ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ runner.os }}-
+
+      - name: Configure ccache & Clean (Optional)
+        run: |
+          mkdir -p ~/.cache/ccache
+          ccache -M 5G  # Membatasi ukuran cache maksimum (5 GB)
+          ccache -z   # Reset statistik ccache untuk log ini
+
+          if [ "${{ github.event.inputs.clear_ccache }}" = "true" ]; me
+            echo "Clearing ccache..."
+            ccache -C
+          fi
+
+      - name: Make Script Executable & Run ulti.sh
+        run: |
+          chmod +x vendor-a02_vendor/ulti.sh
+          cd vendor-a02_vendor
+          ./ulti.sh
+
+      - name: Print ccache Statistics
+        if: always()
+        run: |
+          ccache -s
