@@ -159,5 +159,18 @@ open(vmk,'w').write(t)
 print("dumpsys_vendor_vendor dihapus:",n)
 PY
 
+# --- hapus libalsautils_vendor (bentrok install path vendor/lib/libalsautils.so sama AOSP system/media/alsa_utils) ---
+python3 - "$VBP" "$VMK" << 'PY'
+import re,sys
+vbp,vmk=sys.argv[1:3]
+s=open(vbp).read()
+s,n=re.subn(r'(?ms)^\w+ \{\n\s*name: "libalsautils_vendor",.*?^\}\n','',s)
+open(vbp,'w').write(s)
+t=open(vmk).read()
+t=re.sub(r'(?m)^\s*libalsautils_vendor\s*\\?\n','',t)
+open(vmk,'w').write(t)
+print("libalsautils_vendor dihapus:",n)
+PY
+
 rm -rf out/target/product/a02/vendor/etc/vintf/manifest out/target/product/a02/vendor/etc/etc
 echo "fixlog.sh selesai. Lanjut: ./z"
