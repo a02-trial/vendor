@@ -44,6 +44,7 @@ jobs:
         run: |
           chmod +x vendor-a02_vendor/ulti.sh
           cd ${GITHUB_WORKSPACE}
+          ls
           ./ulti.sh
 
       - name: Print ccache Statistics
