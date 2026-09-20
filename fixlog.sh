@@ -146,5 +146,18 @@ open(vbp,'w').write(s)
 open(vmk,'w').write(t)
 PY
 
+# --- hapus dumpsys_vendor_vendor (bentrok install path vendor/bin/dumpsys sama AOSP dumpsys_vendor) ---
+python3 - "$VBP" "$VMK" << 'PY'
+import re,sys
+vbp,vmk=sys.argv[1:3]
+s=open(vbp).read()
+s,n=re.subn(r'(?ms)^\w+ \{\n\s*name: "dumpsys_vendor_vendor",.*?^\}\n','',s)
+open(vbp,'w').write(s)
+t=open(vmk).read()
+t=re.sub(r'(?m)^\s*dumpsys_vendor_vendor\s*\\?\n','',t)
+open(vmk,'w').write(t)
+print("dumpsys_vendor_vendor dihapus:",n)
+PY
+
 rm -rf out/target/product/a02/vendor/etc/vintf/manifest out/target/product/a02/vendor/etc/etc
 echo "fixlog.sh selesai. Lanjut: ./z"
