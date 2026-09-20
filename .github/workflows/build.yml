@@ -35,7 +35,7 @@ jobs:
           ccache -M 5G  # Membatasi ukuran cache maksimum (5 GB)
           ccache -z   # Reset statistik ccache untuk log ini
 
-          if [ "${{ github.event.inputs.clear_ccache }}" = "true" ]; me
+          if [ "${{ github.event.inputs.clear_ccache }}" = "true" ]; then
             echo "Clearing ccache..."
             ccache -C
           fi
@@ -50,3 +50,14 @@ jobs:
         if: always()
         run: |
           ccache -s
+
+      - name: Upload Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            vendor-a02_vendor/out/*.zip
+            vendor-a02_vendor/out/*.img
+            vendor-a02_vendor/*.zip
+          if-no-files-found: warn
